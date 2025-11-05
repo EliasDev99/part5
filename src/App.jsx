@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import loginService from './services/login'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
@@ -22,6 +23,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
+      blogService.setToken(user.token)
     }
   }, [])
 
@@ -32,6 +34,7 @@ const App = () => {
       window.localStorage.setItem(
         'loggedBlogAppUser', JSON.stringify(user)
       )
+      blogService.setToken(user.token)
       setUser(user)
     } catch {
       setErrorMessage('wrong credentials')
@@ -44,7 +47,15 @@ const App = () => {
    const handleLogout =  () => {
     window.localStorage.removeItem('loggedBlogAppUser')
     setUser(null)
+    blogService.setToken(null)
   }
+
+   const handleCreateBlog = async newBlog => {
+     const response = await blogService.create(newBlog)
+     console.log(response)
+     setBlogs(blogs.concat(response))
+  }
+  
 
   if(user === null) {
     return (
@@ -63,6 +74,7 @@ const App = () => {
         {user.name} logged in
         <button onClick={handleLogout}>logout</button>
       </p>
+      <BlogForm onCreate={handleCreateBlog}/>
        {blogs.map(blog => <Blog key={blog.id} blog={blog} /> )}
     </div>
   )
