@@ -60,6 +60,10 @@ const App = () => {
     blogFormRef.current.toggleVisibility() // hide the form after created
   }
 
+  const handleLikes = (blogUpdated) => {
+    setBlogs(blogs.map((b) => (b.id !== blogUpdated.id ? b : blogUpdated)))
+  }
+
   if (user === null) {
     return (
       <div>
@@ -83,7 +87,7 @@ const App = () => {
       </Togglable>
 
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} onLike={handleLikes} />
       ))}
     </div>
   )
