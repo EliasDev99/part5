@@ -24,7 +24,7 @@ const Blog = ({ blog, onLike }) => {
     }
 
     const updatedBlog = await blogService.update(blog.id, updateBlog)
-    onLike(updatedBlog)
+    onLike({ ...updatedBlog, user: blog.user })
   }
 
   return (
