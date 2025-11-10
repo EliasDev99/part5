@@ -1,57 +1,42 @@
 import js from '@eslint/js'
 import globals from 'globals'
-import react from 'eslint-plugin-react'
-import prettier from 'eslint-plugin-prettier'
-import { defineConfig } from 'eslint/config'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
 
-export default defineConfig([
+export default [
+  { ignores: ['dist'] },
   {
-    files: ['**/*.{js,mjs,cjs,jsx}'],
-    ignores: ['dist/**', 'build/**', 'node_modules/**'],
+    files: ['**/*.{js,jsx}'],
     languageOptions: {
-      ecmaVersion: 2021,
-      sourceType: 'module',
+      ecmaVersion: 2020,
+      globals: globals.browser,
       parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-      globals: {
-        ...globals.browser,
-        ...globals.es2021,
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
       },
     },
     plugins: {
-      react,
-      prettier,
-    },
-    settings: {
-      react: {
-        version: 'detect',
-      },
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
     },
     rules: {
       ...js.configs.recommended.rules,
-      ...react.configs.recommended.rules,
-
-      // ✅ Code style via Prettier
-      'prettier/prettier': [
-        'error',
-        {
-          singleQuote: true,
-          semi: false,
-          trailingComma: 'es5',
-          printWidth: 80,
-          tabWidth: 2,
-          endOfLine: 'auto',
-        },
+      ...reactHooks.configs.recommended.rules,
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
       ],
-
-      // ✅ React & general code cleanliness
-      'react/react-in-jsx-scope': 'off', // React 17+ doesn’t need this
-      'react/prop-types': 'off', // optional
-      'no-console': 'warn',
-      'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      indent: ['error', 2],
+      'linebreak-style': ['error', 'unix'],
+      quotes: ['error', 'single'],
+      semi: ['error', 'never'],
+      eqeqeq: 'error',
+      'no-trailing-spaces': 'error',
+      'object-curly-spacing': ['error', 'always'],
+      'arrow-spacing': ['error', { before: true, after: true }],
+      'no-console': 'off',
     },
   },
-])
+]

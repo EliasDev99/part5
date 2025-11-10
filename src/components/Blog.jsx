@@ -37,7 +37,7 @@ const Blog = ({ blog, onLike, onDelete, user }) => {
     onLike({ ...updatedBlog, user: blog.user })
   }
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     const ok = window.confirm(`Remove blog ${blog.title} by ${blog.author}`)
 
     if (ok) {
