@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import blogService from '../services/blogs.js'
 
-const Blog = ({ blog, onLike }) => {
+const Blog = ({ blog, onLike, onDelete, user }) => {
   const [visible, setVisible] = useState(false)
 
   const blogStyle = {
@@ -10,6 +10,16 @@ const Blog = ({ blog, onLike }) => {
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5,
+  }
+
+  const buttonStyle = {
+    backgroundColor: '#4FC3F7',
+    border: 'none',
+    padding: '2px 6px',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    fontWeight: '600',
+    boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
   }
 
   const toggleVisibility = () => {
@@ -27,6 +37,18 @@ const Blog = ({ blog, onLike }) => {
     onLike({ ...updatedBlog, user: blog.user })
   }
 
+  const handleDelete = async (id) => {
+    const ok = window.confirm(`Remove blog ${blog.title} by ${blog.author}`)
+
+    if (ok) {
+      await blogService.remove(blog.id)
+      onDelete(blog.id)
+    }
+  }
+
+  const hidDeleteButton =
+    user && blog.user && user.username === blog.user.username
+
   return (
     <div style={blogStyle}>
       <div>
@@ -42,6 +64,12 @@ const Blog = ({ blog, onLike }) => {
             likes {blog.likes} <button onClick={handleLike}>like</button>
           </p>
           <p>{blog.user?.name}</p>
+          {hidDeleteButton && (
+            <button style={buttonStyle} onClick={handleDelete}>
+              {' '}
+              remove
+            </button>
+          )}
         </div>
       )}
     </div>

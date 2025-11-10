@@ -64,6 +64,10 @@ const App = () => {
     setBlogs(blogs.map((b) => (b.id !== blogUpdated.id ? b : blogUpdated)))
   }
 
+  const handleDelete = (id) => {
+    setBlogs(blogs.filter((b) => b.id !== id))
+  }
+
   if (user === null) {
     return (
       <div>
@@ -89,7 +93,13 @@ const App = () => {
       {blogs
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <Blog key={blog.id} blog={blog} onLike={handleLikes} />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            onLike={handleLikes}
+            onDelete={handleDelete}
+            user={user}
+          />
         ))}
     </div>
   )
